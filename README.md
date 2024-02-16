@@ -6,7 +6,7 @@ The public folder of this repo is deployed to https://render-plasmic-into-html.n
 (owner of project: Callum Boase)
 
 # How to use?
-1. Load https://render-plasmic-into-html.netlify.app/customComponent.js into your html
+1. Load https://render-plasmic-into-html.netlify.app/customComponents.js into your html
 2. Render the component like this
 ```js
 
