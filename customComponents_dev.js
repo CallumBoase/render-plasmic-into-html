@@ -25,7 +25,7 @@ function setupShadowDOM(targetElement) {
 }
 
 // Register a plasmicComponent renderer
-customComponents.render.plasmicComponent = function plasmicComponent(settings = { targetDiv, projectId, publicToken, preview, component, componentProps, useShadowDOM = false }) {
+customComponents.render.plasmicComponent = function plasmicComponent(settings = { targetDiv, projectId, publicToken, preview, component, componentProps, useShadowDOM }) {
 
   const targetElement = document.getElementById(settings.targetDiv);
   let renderTarget = targetElement;
