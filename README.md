@@ -17,6 +17,8 @@ The public folder of this repo is deployed to https://render-plasmic-into-html.n
 window.customComponents.render.plasmicComponent({
   //The ID of your div to render Plasmic inside
   targetDiv: 'exampleTarget',
+  //Decide if you want to render into a ShadowDOM (to isolate Plamic from external styles on your page)
+  useShadowDOM: false,
   //Your plasmic project token obtained from the plasmic studio URL
   projectId: 'XXXX',
   //Your plasmic project's public token obtained from plasmic studio -> Code button
