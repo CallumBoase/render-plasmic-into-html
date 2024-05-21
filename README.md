@@ -3,6 +3,8 @@ Render a plasmic component or page into a HTML page using the react API, instead
 
 Plasmic react-api docs: https://docs.plasmic.app/learn/react-api/
 
+Important note: this repo ONLY supports components that are natively available in Plasmic. It will NOT render Plasmic components that contain custom code components that you registered in Plasmic studio. If you need this functionality, see the more complex but powerful option: [Plasmic-codegen-into-html-with-vite](https://github.com/CallumBoase/plasmic-codegen-into-html-with-vite).
+
 # Deployment info
 The public folder of this repo is deployed to https://render-plasmic-into-html.netlify.app/
 (owner of project: Callum Boase)
