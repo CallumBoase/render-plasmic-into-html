@@ -1,8 +1,8 @@
 //Helper function to setup a shadow dom to render a component into
 //This is to avoid stylesheet collisions between the main document and the component
-//This component copies the styles from the main document to the shadow dom
-//when the <style> element id is 'custom-component-styles' (<style> elements inserted by the dist version of this repo)
-//Or when the <style> element has 'data-vite-dev-id' attribute (<style> elements inserted by the dev version of this repo when running npm run dev)
+//This component copies the styles from the main document to the shadow dom when those style tags were inserted by Plasmic
+//To ensure that the styles are available in the shadow dom too
+//It also sets up an observer to capture dynamic font imports inserted by Plasmic inside the shadow dom and copies them to the main document
 
 export function setupShadowDOM(targetElement) {
   let shadowRoot = targetElement.shadowRoot;
@@ -76,7 +76,7 @@ export function moveStylesToShadowDom(shadowRoot) {
   // Since the shadow dom is isolated from the main document, we need to copy over the styles
   const allStyleElements = document.querySelectorAll('head style');
   const styleElementsToClone = Array.from(allStyleElements)
-    .filter(el => isViteDevModeTag(el) || isStyleTagCreatedByViteCssinjs(el) || isStyleTagCreatedByAntCssinjs(el));
+    .filter(el => isStyleTagCreatedByAntCssinjs(el));
 
   styleElementsToClone.forEach(originalStyleElement => {
 
@@ -101,18 +101,6 @@ function checkIfIdenticalTagExistsInShadowDom(shadowRoot, styleElement) {
   return existingStyleElement ? true : false;
 }
 
-function isViteDevModeTag(styleElement) {
-  // When using Vite in dev mode it sometimes inserts style tags with a 'data-vite-dev-id' attribute
-  // We can check for this attribute to determine if the style tag was created by Vite in dev mode
-  return styleElement.getAttribute('data-vite-dev-id') !== null;
-}
-
-function isStyleTagCreatedByViteCssinjs(styleElement) {
-  // We configure vite to inject all imported .css and .module.css files as a <style> tag with id 'custom-component-styles'
-  // So we can check for this id to determine if the <style> tag was created by us (via Vite)
-  return styleElement.id === 'custom-component-styles' || styleElement.getAttribute('data-vite-dev-id') !== null;
-}
-
 function isStyleTagCreatedByAntCssinjs(styleElement) {
   // Plasmic seems to allow Ant to create <style> tags in the dom using cssinjs
   // These <style> tags have some predictable attributes, some of which have predictable values
@@ -124,6 +112,7 @@ function isStyleTagCreatedByAntCssinjs(styleElement) {
     styleElement.attributes.getNamedItem('data-css-hash') !== null &&
     styleElement.attributes.getNamedItem('data-token-hash') !== null
   );
+  console.log('isAntCssinjsTag', isAntCssinjsTag);
 
   return isAntCssinjsTag;
 }
