@@ -19,6 +19,28 @@ export function setupShadowDOM(targetElement) {
     shadowContainer.id = 'shadow-container';
     shadowRoot.appendChild(shadowContainer);
 
+    // Add MutationObserver for the shadow-container to log and process added style elements
+    const styleObserver = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        for (const node of mutation.addedNodes) {
+          if (node.nodeName && node.nodeName.toLowerCase() === 'style') {
+            console.log('Added style tag text content:', node.textContent);
+            processFontImports(node.textContent);
+            // Attach a secondary observer to capture later text content changes within the new style tag
+            if (!node.__observing) {
+              node.__observing = true;
+              const innerObserver = new MutationObserver(() => {
+                console.log('Updated style tag text content:', node.textContent);
+                processFontImports(node.textContent);
+              });
+              innerObserver.observe(node, { childList: true, characterData: true, subtree: true });
+            }
+          }
+        }
+      }
+    });
+    styleObserver.observe(shadowContainer, { childList: true });
+
     // move styling from main document to shadow dom (ones that exist at the time of setup)
     moveStylesToShadowDom(shadowRoot);
 
@@ -96,4 +118,19 @@ function isStyleTagCreatedByAntCssinjs(styleElement) {
   );
 
   return isAntCssinjsTag;
+}
+
+// New helper to process @import font rules in style content
+function processFontImports(text) {
+  const regex = /@import\s+url\((['"]?)(.*?)\1\)/g;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    const url = match[2];
+    if (!document.head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
+    }
+  }
 }
