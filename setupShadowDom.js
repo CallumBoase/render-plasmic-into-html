@@ -19,27 +19,10 @@ export function setupShadowDOM(targetElement) {
     shadowContainer.id = 'shadow-container';
     shadowRoot.appendChild(shadowContainer);
 
-    // Add MutationObserver for the shadow-container to log and process added style elements
-    const styleObserver = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        for (const node of mutation.addedNodes) {
-          if (node.nodeName && node.nodeName.toLowerCase() === 'style') {
-            console.log('Added style tag text content:', node.textContent);
-            processFontImports(node.textContent);
-            // Attach a secondary observer to capture later text content changes within the new style tag
-            if (!node.__observing) {
-              node.__observing = true;
-              const innerObserver = new MutationObserver(() => {
-                console.log('Updated style tag text content:', node.textContent);
-                processFontImports(node.textContent);
-              });
-              innerObserver.observe(node, { childList: true, characterData: true, subtree: true });
-            }
-          }
-        }
-      }
-    });
-    styleObserver.observe(shadowContainer, { childList: true });
+    // Set up observer on shadowContainer to capture dynamic inserts by Plasmic of style tags containing font imports
+    // When detected, add a <link> tag to import that font in the entire parent document
+    // This avoids an issue where font imports do not work in the shadow dom via injected style tags from Plasmic
+    setupShadowDomFontImportsObserver(shadowContainer);
 
     // move styling from main document to shadow dom (ones that exist at the time of setup)
     moveStylesToShadowDom(shadowRoot);
@@ -51,6 +34,31 @@ export function setupShadowDOM(targetElement) {
   return shadowContainer;
 }
 
+// Set up observer on the shadow dom container so that whenever a style tag is added or updated,
+// we extract @import font rules and copy them to document.head. This ensures that fonts imported in shadow styles 
+// are available in the whole document & available in the shadow too
+function setupShadowDomFontImportsObserver(container) {
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      for (const node of mutation.addedNodes) {
+        if (node.nodeName && node.nodeName.toLowerCase() === 'style') {
+          processFontImports(node.textContent);
+          if (!node.__observing) {
+            node.__observing = true;
+            const innerObserver = new MutationObserver(() => {
+              processFontImports(node.textContent);
+            });
+            innerObserver.observe(node, { childList: true, characterData: true, subtree: true });
+          }
+        }
+      }
+    }
+  });
+  observer.observe(container, { childList: true });
+}
+
+// Helper function to setup an observer to move styles from the main document to the shadow dom
+// This covers the situation where styles are added by Plasmic to the main document which the shadow wouldn't otherwise see
 function setupStyleObserver(shadowRoot) {
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
