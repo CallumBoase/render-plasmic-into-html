@@ -1,13 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World with React</title>
-    <!-- <script src="knackWindow.js"></script> -->
-    <script src="../public/customComponents.js"></script>
-    
-  </head>
-  <body>
-    <!-- create div and render component into it here -->
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World with React</title>
+  <!-- <script src="knackWindow.js"></script> -->
+  <script src="../public/customComponents.js"></script>
+
+</head>
+
+<body>
+  <!-- create div and render component into it here -->
+  <div id="plasmic">Loading...</div>
+  <script>
+    // Replace the variables below with the appropriate options
+    window.customComponents.render.plasmicComponent({
+
+      //Id of the div or html element to render inside. 
+      //Eg a rich text view containing html <div id="home-page">Loading...</div>
+      targetDiv: 'plasmic',
+
+      //true/false Whether or not to render into a shadow DOM to isolate Knack styles from Plasmic (recommended: true)
+      useShadowDOM: true,
+
+      //project ID of the plasmic project (see the URL of your project in Plasmic Studio)
+      projectId: 'myL5drGxzqkBydFoBdakVK',
+
+      //Public token of your project - obtained via Plasmic studio -> Code button
+      publicToken: 'OnTmwVXhSOJ2Bici1br5jdiq1gR6Nf8wn919qHkdH3uK0TuYOvwVTcKB72YPA2oSB2ZIy58JJT9SBzYXYt3SZg',
+
+      //true/false. Whether to render the latest version of your Plasmic page/component even if unpublished. 
+      //Recommended: true for development, false for production
+      preview: true,
+
+      //The name of your plasmic component or page to render (according to Plasmic studio)
+      component: 'ConcessionProjects',
+
+      //Any props you want to pass into your component see react-api docs above
+      componentProps: {}
+
+    });
+  </script>
+</body>
+
 </html>
