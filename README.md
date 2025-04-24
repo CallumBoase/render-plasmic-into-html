@@ -55,3 +55,7 @@ Version 1.0.0 of this repo is deployed to Netlify via the below method, however 
 The public folder of this repo, version 1.0.0 is deployed to https://render-plasmic-into-html.netlify.app/
 (owner of project: Callum Boase)
 
+Legacy method for importing into your project: Load `https://render-plasmic-into-html.netlify.app/customComponents.js` into your html (eg via a script tag in `<head>`)
+
+Then continue with instructions above.
+
