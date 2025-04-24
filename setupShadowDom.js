@@ -112,7 +112,6 @@ function isStyleTagCreatedByAntCssinjs(styleElement) {
     styleElement.attributes.getNamedItem('data-css-hash') !== null &&
     styleElement.attributes.getNamedItem('data-token-hash') !== null
   );
-  console.log('isAntCssinjsTag', isAntCssinjsTag);
 
   return isAntCssinjsTag;
 }

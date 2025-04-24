@@ -5,12 +5,15 @@ Plasmic react-api docs: https://docs.plasmic.app/learn/react-api/
 
 Important note: this repo ONLY supports components that are natively available in Plasmic. It will NOT render Plasmic components that contain custom code components that you registered in Plasmic studio. If you need this functionality, see the more complex but powerful option: [Plasmic-codegen-into-html-with-vite](https://github.com/CallumBoase/plasmic-codegen-into-html-with-vite).
 
-# Deployment info
-The public folder of this repo is deployed to https://render-plasmic-into-html.netlify.app/
-(owner of project: Callum Boase)
+# Changelog
+### 1.0.0 (24 April 2025)
+* Remove unecessary console.log
+* Update package.json to contain version and name
+* Update readme for how to import into your HTML - using cdn.jsdelivr instead of deployed Netlify project (which allows specifying a version too)
 
 # How to use?
-1. Load https://render-plasmic-into-html.netlify.app/customComponents.js into your html (eg via a script tag in `<head>`)
+1. Load `https://cdn.jsdelivr.net/gh/CallumBoase/render-plasmic-into-html@1.0.0/public/customComponents.js` into your html (eg via a script tag in `<head>`)
+    * Note the version after @ in the URL. You can load any published version (see Tags in the github of this project)
 2. In your html add a div with an id eg `<div id="exampleTarget"></div>`
 3. Render the component into your HTML using javascript somewhere on the page. 
 
@@ -37,9 +40,15 @@ window.customComponents.render.plasmicComponent({
 
 ```
 
-# Publishing updates
-1. Make the changes
-2. Run `npm run build`
-3. Commit the changes & push to main branch
-4. Netlify will automatically deploy the changes
+# Legacy info for how to load `render-plasmic-into-html` into your project
+
+This method is NO LONGER RECOMMENDED!
+
+As of version 1.0.0 on 24 April 2025, we no longer recommend importing the package using the method below due to issues with version control.
+
+Version 1.0.0 of this repo is deployed to Netlify via the below method, however new version will no longer be deployed to Netlify. This ensure stability of version 1.0.0 for legacy users but discouarges future use.
+
+# Deployment info (legacy not recommended)
+The public folder of this repo, version 1.0.0 is deployed to https://render-plasmic-into-html.netlify.app/
+(owner of project: Callum Boase)
 
