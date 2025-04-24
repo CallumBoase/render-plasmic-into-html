@@ -1,3 +1,6 @@
+## Important note on branch 1.0.0-last-version-deployed-to-netlify
+This branch should not be deleted. It is here to create the last version deployed to Netlify for legacy method of importing the script. See details at bottom of readme.
+
 # render-plasmic-into-html
 Render a plasmic component or page into a HTML page using the react API, instead of the normal Render API. This is more functional and flexible than using Plasmic's render API.
 
